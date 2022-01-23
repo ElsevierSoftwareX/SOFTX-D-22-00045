@@ -1,0 +1,7 @@
+name: "Institution 1 Node 1 server"
+serverType: "node"
+address: "127.0.0.1"
+port: 8085
+JWTPassword: "secret"
+debug: true
+imagesFolder: "/tank/teza/images/institution1-node1/"

@@ -1,0 +1,293 @@
+<mat-card fxLayout="column">
+
+  <mat-card-header>
+    <mat-card-title>Radiology reports</mat-card-title>
+  </mat-card-header>
+
+  <mat-divider [inset]="true"></mat-divider>
+
+  <mat-card-content fxFlex fxLayout="column">
+
+    <mat-tab-group #tabGroup animationDuration="0ms">
+      <mat-tab label="Select patient">
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <form #form1 (ngSubmit)="findByFirstAndLastName(form1)" [formGroup]="findPatientByFirstAndLastNameForm"
+                fxLayout="row"
+                fxLayoutAlign="start center">
+
+            <mat-form-field class="input-width">
+              <input formControlName="firstNamePattern" matInput placeholder="First name *:" type="text">
+            </mat-form-field>
+
+            <mat-form-field class="input-width" fxFlexOffset="30px">
+              <input formControlName="lastNamePattern" matInput placeholder="Last name *:" type="text">
+            </mat-form-field>
+
+            <button [disabled]="findPatientByFirstAndLastNameForm.invalid" color="primary" fxFlexOffset="30px"
+                    mat-raised-button
+                    type="submit">Search
+            </button>
+
+          </form>
+
+          <form #form2 (ngSubmit)="findByInsuranceNumber(form2)" [formGroup]="findPatientByInsuranceNumberForm"
+                fxFlexOffset="90px"
+                fxLayout="row" fxLayoutAlign="start center">
+
+            <mat-form-field class="input-width">
+              <input formControlName="insuranceNumberPattern" matInput placeholder="Insurance number *:" type="number">
+            </mat-form-field>
+
+            <button [disabled]="findPatientByInsuranceNumberForm.invalid" color="primary" fxFlexOffset="30px"
+                    mat-raised-button
+                    type="submit">Search
+            </button>
+
+          </form>
+        </div>
+
+        <mat-divider [inset]="true"></mat-divider>
+
+        <mat-form-field class="full-width">
+          <input (keyup)="tablePatientsFilter($event.target.value)" matInput placeholder="Filter">
+        </mat-form-field>
+
+        <div fxFlex style="overflow: auto;">
+
+          <table [dataSource]="patients" class="full-width" mat-table matSort>
+
+            <ng-container matColumnDef="select">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let row" mat-cell>
+                <mat-checkbox (change)="$event ? tableSelectionPatient.toggle(row) : null"
+                              (click)="$event.stopPropagation()"
+                              [checked]="tableSelectionPatient.isSelected(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="first_name">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>First name</th>
+              <td *matCellDef="let element" mat-cell> {{element.first_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="last_name">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Last name</th>
+              <td *matCellDef="let element" mat-cell> {{element.last_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gender">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Gender</th>
+              <td *matCellDef="let element" mat-cell> {{element.gender | genderPipe}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_of_birth">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Date of birth</th>
+              <td *matCellDef="let element" mat-cell> {{element.date_of_birth | date:'dd.MM.yyyy.'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="insurance_number">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Insurance number</th>
+              <td *matCellDef="let element" mat-cell> {{element.insurance_number}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Address</th>
+              <td *matCellDef="let element" mat-cell> {{element.address}} </td>
+            </ng-container>
+
+            <tr *matHeaderRowDef="displayedColumnsPatient; sticky: true;" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumnsPatient;" mat-row></tr>
+
+          </table>
+
+        </div>
+
+        <mat-paginator #paginator1 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+      </mat-tab>
+      <mat-tab label="Search results">
+
+        <mat-form-field class="full-width">
+          <input (keyup)="tableReportsFilter($event.target.value)" matInput placeholder="Filter">
+        </mat-form-field>
+
+        <div fxFlex style="overflow: auto;">
+
+          <table [dataSource]="reports" class="full-width" mat-table matSort>
+
+            <ng-container matColumnDef="select">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let row" mat-cell>
+                <mat-checkbox (change)="$event ? tableSelectionReport.toggle(row) : null"
+                              (click)="$event.stopPropagation()"
+                              [checked]="tableSelectionReport.isSelected(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="institution_name">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Institution</th>
+              <td *matCellDef="let element" mat-cell> {{findInstitutionFromID(element.institution).name}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
+              <td *matCellDef="let element"
+                  mat-cell> {{element.radiology_report.date_and_time | date:'dd.MM.yyyy.'}} </td>
+            </ng-container>
+
+            <tr *matHeaderRowDef="displayedColumnsReport; sticky: true;" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumnsReport;" mat-row></tr>
+
+          </table>
+
+        </div>
+
+        <mat-paginator #paginator2 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </mat-tab>
+      <mat-tab label="Edit report">
+
+        <div fxLayout="row" fxLayoutGap="10px" style="margin: 10px;">
+          <div fxFlex="60%" fxLayout="column" style="overflow: auto;">
+            <form #form3 (ngSubmit)="saveReport(form3)" *ngIf="radiologyReportForm !== undefined"
+                  [formGroup]="radiologyReportForm" id="form3">
+
+              <p>Date: {{reportDate}}</p>
+              <p>MD name: {{MDName}}</p>
+              <mat-divider [inset]="true"></mat-divider>
+
+              <br>
+
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Description
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <textarea formControlName="description" matInput
+                            style="height: 250px; border-width: thin; border-style: solid;"></textarea>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Findings
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <textarea formControlName="findings" matInput
+                            style="height: 250px; border-width: thin; border-style: solid;"></textarea>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Conclusion
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <textarea formControlName="conclusion" matInput
+                            style="height: 250px; border-width: thin; border-style: solid;"></textarea>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Recommendation
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <textarea formControlName="recommendation" matInput
+                            style="height: 250px; border-width: thin; border-style: solid;"></textarea>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </form>
+          </div>
+          <div fxFlex="40%" fxLayout="column" style="overflow: auto;">
+
+            <mat-form-field class="full-width">
+              <input (keyup)="tableImagesFilter($event.target.value)" matInput placeholder="Filter">
+            </mat-form-field>
+
+            <div class="full-width" fxFlex>
+              <table [dataSource]="images" class="full-width" mat-table matSort>
+
+                <ng-container matColumnDef="select">
+                  <th *matHeaderCellDef mat-header-cell></th>
+                  <td *matCellDef="let row" mat-cell>
+                    <mat-checkbox (change)="$event ? tableSelectionImage.toggle(row) : null"
+                                  (click)="$event.stopPropagation()"
+                                  [checked]="tableSelectionImage.isSelected(row)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="institution">
+                  <th *matHeaderCellDef mat-header-cell mat-sort-header>Institution</th>
+                  <td *matCellDef="let element"
+                      mat-cell> {{findInstitutionFromID(element.institution).name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="imageType">
+                  <th *matHeaderCellDef mat-header-cell mat-sort-header>Image type</th>
+                  <td *matCellDef="let element"
+                      mat-cell> {{findImageTypeFromImage(element.image).description}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
+                  <td *matCellDef="let element"
+                      mat-cell> {{findDateFromImage(element.image) | date:'dd.MM.yyyy.'}} </td>
+                </ng-container>
+
+                <tr *matHeaderRowDef="displayedColumnsImage; sticky: true;" mat-header-row></tr>
+                <tr *matRowDef="let row; columns: displayedColumnsImage;" mat-row></tr>
+
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+  </mat-card-content>
+  <mat-card-actions>
+
+    <div class="center-align">
+      <button (click)="searchReports()" *ngIf="tabGroup.selectedIndex == 0"
+              [disabled]="!(!tableSelectionPatient.isEmpty() && this.loginService.sessionData.MD === true)"
+              class="margins" color="primary" mat-raised-button>Search reports
+      </button>
+      <button (click)="newReport()" *ngIf="tabGroup.selectedIndex == 0"
+              [disabled]="!(!tableSelectionPatient.isEmpty() && this.loginService.sessionData.MD === true)"
+              class="margins" color="primary" mat-raised-button>New report
+      </button>
+      <button (click)="editReport()" *ngIf="tabGroup.selectedIndex == 1" [disabled]="tableSelectionReport.isEmpty()"
+              color="primary" mat-raised-button>Edit
+      </button>
+      <button *ngIf="tabGroup.selectedIndex == 2"
+              [disabled]="this.radiologyReportForm === undefined || this.radiologyReportForm.invalid" color="primary"
+              form="form3" mat-raised-button type="submit">Save
+      </button>
+      <button (click)="deleteReport()" *ngIf="tabGroup.selectedIndex == 2"
+              [disabled]="this.radiologyReportForm === undefined || this.radiologyReportForm?.value?.id === undefined"
+              color="primary" mat-raised-button>Delete
+      </button>
+      <button (click)="searchImages()" *ngIf="tabGroup.selectedIndex == 2"
+              [disabled]="this.radiologyReportForm === undefined || this.radiologyReportForm?.value?.id === undefined"
+              color="primary" mat-raised-button>Add image
+      </button>
+      <button (click)="removeImage()" *ngIf="tabGroup.selectedIndex == 2"
+              [disabled]="this.radiologyReportForm === undefined || this.tableSelectionImage.isEmpty()"
+              color="primary" mat-raised-button>Remove image
+      </button>
+      <button (click)="displayImage()" *ngIf="tabGroup.selectedIndex == 2"
+              [disabled]="this.radiologyReportForm === undefined || this.tableSelectionImage.isEmpty()"
+              color="primary" mat-raised-button>Display Image
+      </button>
+
+    </div>
+
+  </mat-card-actions>
+</mat-card>

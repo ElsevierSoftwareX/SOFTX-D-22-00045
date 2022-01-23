@@ -1,0 +1,881 @@
+openapi: 3.0.3
+servers:
+  - url: "https://localhost:8080/restful"
+info:
+  title: Toplevel server API
+  description: RESTful API for toplevel server
+  version: 1.0.0
+  contact:
+    name: Krešimir Jozić
+    email: kjozic@gmail.com
+  license:
+    name: MIT
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      tags:
+        - auth
+        - regular_access
+      description: |
+        The /auth/login endpoint is used for user login.
+      responses:
+        "200":
+          description: User login was successful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/loginResponse"
+        "401":
+          description: Wrong username or password or user is blocked.
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginRequest"
+  /auth/watchdog:
+    post:
+      summary: Refresh token before expiration
+      tags:
+        - auth
+        - regular_access
+      description: >
+        The /auth/watchdog endpoint is used to refresh access timestamp. If
+        timestamp is not refreshed more than 5 minutes, user is automatically
+        logged out.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Timestamp refresh was successful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/loginResponse"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+  /institution/persist:
+    post:
+      summary: Insert or update existing institution data in database
+      tags:
+        - institution
+        - admin_access
+      description: >
+        The /institution/persist endpoint is used to insert data about the new institution or
+        to update data from existing institution.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Institution data was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/institutionData"
+  /institution/get-all:
+    post:
+      summary: Get list of all institutions
+      tags:
+        - institution
+        - admin_access
+      description: |
+        The /institution/get-all endpoint is used to fetch data of all institutions.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: List of all institutions was sucessfully fetched.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/institutionData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+  /institution/find-by-name:
+    post:
+      summary: Find institution by name
+      tags:
+        - institution
+        - admin_access
+      description: |
+        The /institution/find-by-name endpoint is used to find institution data by name.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Institution data was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/institutionData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findInstitutionByNameRequest"
+  /institution/delete:
+    post:
+      summary: Delete institution
+      tags:
+        - institution
+        - admin_access
+      description: |
+        The /institution/delete endpoint is used to delete institution.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Institution data was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /user/persist:
+    post:
+      summary: Insert or update existing user data in database
+      tags:
+        - user
+        - admin_access
+      description: >
+        The /user/persist endpoint is used to insert data about the new user or
+        to update data from existing user.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: User data was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userData"
+  /user/get:
+    post:
+      summary: Get user by ID
+      tags:
+        - user
+        - user_access
+      description: |
+        The /user/get endpoint is used to find user data by ID.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: User data was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/userData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /user/find-by-name:
+    post:
+      summary: Find user by first and last name
+      tags:
+        - user
+        - user_access
+      description: |
+        The /user/find-by-name endpoint is used to find user data by first and last name.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: User data was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/userData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findByFirstAndLastName"
+  /user/find-by-institution:
+    post:
+      summary: Find user by institution in which he/she works
+      tags:
+        - user
+        - user_access
+      description: |
+        The /user/find-by-institution endpoint is used to find user data by institution in which he/she works.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: User data was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/userData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /user/change-password:
+    post:
+      summary: Change user password
+      tags:
+        - user
+        - regular_access
+      description: |
+        The /user/change-password endpoint is used to change password of a user.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Password was successfully changed.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/changePasswordRequest"
+  /user/delete:
+    post:
+      summary: Delete user
+      tags:
+        - user
+        - admin_access
+      description: |
+        The /user/delete endpoint is used to delete user.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: User data was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /user/get-my-data:
+    post:
+      summary: Get user and institution data
+      tags:
+        - user
+        - regular_access
+      description: |
+        The /user/get-my-data is used to fetch data about the user and the institution for which he works.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: User data was successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/myUserData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+  /patient/persist:
+    post:
+      summary: Insert or update existing patient data in database
+      tags:
+        - patient
+        - regular_access
+      description: >
+        The /patient/persist endpoint is used to insert data about the new patient or
+        to update data from existing patient.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Patient data was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/patientData"
+  /patient/find-by-name:
+    post:
+      summary: Find patient by first and last name
+      tags:
+        - patient
+        - regular_access
+      description: |
+        The /patient/find-by-name endpoint is used to find patient data by first and last name.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Patient data was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/patientData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findByFirstAndLastName"
+  /patient/find-by-insurance-number:
+    post:
+      summary: Find patient by insurance number
+      tags:
+        - patient
+        - regular_access
+      description: |
+        The /patient/find-by-insurance-number endpoint is used to find patient data by insurance number.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Patient data was successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/patientData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findPatientByInsuranceNumberRequest"
+  /patient/delete:
+    post:
+      summary: Delete patient
+      tags:
+        - patient
+        - regular_access
+      description: |
+        The /patient/delete endpoint is used to delete patient.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Patient data was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /image-type/get-all:
+    post:
+      summary: Get all image types
+      tags:
+        - image-type
+        - regular_access
+      description: |
+        The /image-type/get-all endpoint is used to fetch all image types.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: List of all image types was sucessfully fetched.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/imageType"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+  /image-type/persist:
+    post:
+      summary: Insert or update existing image type in database
+      tags:
+        - image-type
+        - admin_access
+      description: >
+        The /image-type/persist endpoint is used to insert new or update existing image type.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image type was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/imageType"
+  /image-type/delete:
+    post:
+      summary: Delete image type
+      tags:
+        - image-type
+        - admin_access
+      description: |
+        The /image-type/delete endpoint is used to delete image type.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image type was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /image-type/get:
+    post:
+      summary: Get image type
+      tags:
+        - image-type
+        - regular_access
+      description: |
+        The /image-type/get endpoint is used to get image type.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image type was successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/imageType"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+components:
+  schemas:
+    JWTToken:
+      type: object
+      required:
+        - admin
+        - superuser
+        - exp
+        - user_id
+        - MD
+        - orig_iat
+        - institution_id
+        - institution_ip_address
+        - institution_port_number
+      properties:
+        admin:
+          type: boolean
+          example: true
+        superuser:
+          type: boolean
+          example: false
+        exp:
+          type: integer
+          format: int32
+          example: 1585858491
+          description: Time of JWT token expiry.
+        user_id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        MD:
+          type: boolean
+          example: true
+          description: User is doctor of medicine
+        orig_iat:
+          type: integer
+          format: int32
+          example: 1585858491
+          description: Time of JWT token creation.
+        institution_id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        institution_ip_address:
+          type: string
+          format: ipv4
+          example: 127.0.0.1
+        institution_port_number:
+          type: integer
+          format: int32
+          example: 8080
+    loginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: Test
+        password:
+          type: string
+          format: password
+          description: MD5 encoded password.
+          minLength: 32
+          maxLength: 32
+          example: 4e7f3744047d744909f5d0b8ce8138d7
+    loginResponse:
+      type: object
+      required:
+        - expire
+        - token
+      properties:
+        expire:
+          type: string
+          format: date-time
+          example: "2017-08-05T11:21:18+02:00"
+        token:
+          type: string
+          example: >
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNTAxOTI0ODc4LCJpZCI6IlByb2JhIiwib3JpZ19pYXQiOjE1MDE5MjQ1Nzh9.udo6KqdLNOAq0mapKZJpsGGSb9QHbmx4AddRDtDWhNc
+    institutionData:
+      type: object
+      required:
+        - id
+        - name
+        - address
+        - ip_address
+        - port_number
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        name:
+          type: string
+          example: FER
+        address:
+          type: string
+          example: Unska 3
+        ip_address:
+          type: string
+          format: ipv4
+          example: 127.0.0.1
+        port_number:
+          type: integer
+          format: int32
+          example: 8080
+    findInstitutionByNameRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: FER
+    userData:
+      type: object
+      required:
+        - username
+        - password
+        - first_name
+        - last_name
+        - administrator
+        - superuser
+        - active
+        - institution
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        username:
+          type: string
+          example: John
+        password:
+          type: string
+          format: password
+          description: MD5 encoded password.
+          minLength: 32
+          maxLength: 32
+          example: 4e7f3744047d744909f5d0b8ce8138d7
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        administrator:
+          type: boolean
+          example: false
+        superuser:
+          type: boolean
+          example: false
+        active:
+          type: boolean
+          example: true
+        institution:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        address:
+          type: string
+          example: Unska 3, 10000 Zagreb
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+        phone:
+          type: string
+          example: +385 95 123 456
+    changePasswordRequest:
+      type: object
+      required:
+        - old_password
+        - new_password
+      properties:
+        old_password:
+          type: string
+          format: password
+          description: MD5 encoded password.
+          minLength: 32
+          maxLength: 32
+          example: 4e7f3744047d744909f5d0b8ce8138d7
+        new_password:
+          type: string
+          format: password
+          description: MD5 encoded password.
+          minLength: 32
+          maxLength: 32
+          example: 0cbc6611f5540bd0809a388dc95a615b
+    patientData:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - gender
+        - date_of_birth
+        - insurance_number
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        gender:
+          type: string
+          minLength: 1
+          maxLength: 1
+          example: M
+        date_of_birth:
+          type: string
+          format: date
+          example: "2017-08-14"
+        insurance_number:
+          type: string
+          example: 1234567890
+        address:
+          type: string
+          example: Unska 3, 10000 Zagreb
+        email:
+          type: string
+          example: john.doe@gmail.com
+        phone:
+          type: string
+          example: +385 95 123 456
+    findByFirstAndLastName:
+      type: object
+      required:
+        - first_name
+        - last_name
+      properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+    findPatientByInsuranceNumberRequest:
+      type: object
+      required:
+        - insurance_number
+      properties:
+        insurance_number:
+          type: string
+          example: 1234567890
+    recordId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+    myUserData:
+      type: object
+      required:
+        - institution_data
+        - user_data
+      properties:
+        institution_data:
+          $ref: "#/components/schemas/institutionData"
+        user_data:
+          $ref: "#/components/schemas/userData"
+    imageType:
+      type: object
+      required:
+        - id
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        description:
+          type: string
+          example: Computed tomography
+  securitySchemes:
+    JWTToken:
+      type: http
+      description: JWT token
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    ErrorUnauthorized:
+      description: User is not authorized for this action.
+    ErrorQueryingDatabase:
+      description: Error while querying database.
+    ErrorParsingRequest:
+      description: Error while parsing request data.
+    ErrorDeletingRecord:
+      description: Error while deleting record.
+    ErrorNotFound:
+      description: Endpoint not found.
+tags:
+  - name: auth
+  - name: institution
+  - name: user
+  - name: patient
+  - name: admin_access
+    description: Path can be accessed only by administrator.
+  - name: regular_access
+    description: Path can be accessed by regular users.

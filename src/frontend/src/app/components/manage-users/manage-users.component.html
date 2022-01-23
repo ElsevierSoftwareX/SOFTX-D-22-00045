@@ -1,0 +1,121 @@
+<mat-card fxLayout="column">
+
+  <mat-card-header>
+    <mat-card-title>Manage users</mat-card-title>
+  </mat-card-header>
+
+  <mat-divider [inset]="true"></mat-divider>
+
+  <mat-card-content fxFlex fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <form #form1 fxLayout="row" fxLayoutAlign="start center" [formGroup]="findByFirstAndLastNameForm"
+        (ngSubmit)="findByFirstAndLastName(form1)">
+
+        <mat-form-field class="input-width">
+          <input type="text" matInput placeholder="First name *:" formControlName="firstNamePattern">
+        </mat-form-field>
+
+        <mat-form-field class="input-width" fxFlexOffset="30px">
+          <input type="text" matInput placeholder="Last name *:" formControlName="lastNamePattern">
+        </mat-form-field>
+
+        <button fxFlexOffset="30px" type="submit" mat-raised-button color="primary"
+          [disabled]="findByFirstAndLastNameForm.invalid">Search</button>
+
+      </form>
+
+      <form #form2 fxLayout="row" fxLayoutAlign="start center" fxFlexOffset="90px" [formGroup]="findByInstitutionForm"
+        (ngSubmit)="findByInstitution(form2)">
+
+        <mat-form-field class="input-width">
+          <mat-select placeholder="Institution *" formControlName="institutionPattern">
+
+            <mat-option *ngFor="let inst of institutions" [value]="inst.id">
+              {{inst.name + ", " + inst.address}}
+            </mat-option>
+
+          </mat-select>
+        </mat-form-field>
+
+        <button fxFlexOffset="30px" type="submit" mat-raised-button color="primary"
+          [disabled]="findByInstitutionForm.invalid">Search</button>
+
+      </form>
+    </div>
+
+    <mat-divider [inset]="true"></mat-divider>
+
+    <mat-form-field class="full-width">
+      <input matInput (keyup)="tableFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+
+    <div fxFlex style="overflow: auto;">
+
+      <table mat-table [dataSource]="users" matSort class="full-width">
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? tableSelection.toggle(row) : null"
+              [checked]="tableSelection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="first_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
+          <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="last_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last name</th>
+          <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox [checked]="element.active"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="md">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>MD</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox [checked]="element.doctor_of_medicine"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="institution">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Institution</th>
+          <td mat-cell *matCellDef="let element"> {{getInstitutionName(element.institution)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+          <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+  </mat-card-content>
+  <mat-card-actions>
+
+    <div class="center-align">
+      <button mat-raised-button color="primary" (click)="persistUser(true)">Add new</button>
+      <button mat-raised-button color="primary" [disabled]="tableSelection.isEmpty()" class="margins"
+        (click)="persistUser(false)">Edit</button>
+      <button mat-raised-button color="primary" [disabled]="tableSelection.isEmpty()"
+        (click)="deleteUser()">Delete</button>
+    </div>
+
+  </mat-card-actions>
+</mat-card>

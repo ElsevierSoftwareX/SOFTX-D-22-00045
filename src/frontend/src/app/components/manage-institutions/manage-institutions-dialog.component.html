@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Edit institution data</h2>
+<mat-dialog-content>
+  <form [formGroup]="institutionDataForm">
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Name *" formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Address *" formControlName="address">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="IP address *" formControlName="ip_address">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="number" matInput placeholder="Port number *" formControlName="port_number">
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxFlex fxLayoutAlign="center center">
+    <button mat-raised-button color="warn" [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="institutionDataForm.value"
+      [disabled]="institutionDataForm.invalid">Save</button>
+  </div>
+</mat-dialog-actions>

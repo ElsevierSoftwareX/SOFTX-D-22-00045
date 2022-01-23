@@ -1,0 +1,5 @@
+backend
+vk_*.txt
+database/
+web/
+*.log

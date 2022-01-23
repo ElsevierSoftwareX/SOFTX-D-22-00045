@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Edit image data</h2>
+<mat-dialog-content>
+  <form [formGroup]="imageDataForm">
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-form-field class="input-width">
+        <input type="datetime" matInput placeholder="Date and time *" formControlName="date_and_time">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <mat-select placeholder="Image type *" formControlName="image_type">
+          <mat-option *ngFor="let type of imageTypes" [value]="type.id">
+            {{type.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput readonly placeholder="Node *" formControlName="node"
+          value="{{getNodeName(imageDataForm.get('node').value)}}">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <textarea matInput placeholder="Description *" formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput readonly placeholder="Image MD5 sum *" formControlName="checksum">
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxFlex fxLayoutAlign="center center">
+    <button mat-raised-button color="warn" [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="imageDataForm.value"
+      [disabled]="imageDataForm.invalid">Save</button>
+  </div>
+</mat-dialog-actions>

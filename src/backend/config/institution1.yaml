@@ -1,0 +1,7 @@
+name: "Institution 1 server"
+serverType: "institution"
+address: "127.0.0.1"
+port: 8082
+databasePort: 10000
+JWTPassword: "secret"
+debug: true

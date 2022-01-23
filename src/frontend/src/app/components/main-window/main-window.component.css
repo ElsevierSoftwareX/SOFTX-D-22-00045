@@ -1,0 +1,15 @@
+.container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.sidenav-width {
+  width: 250px;
+}

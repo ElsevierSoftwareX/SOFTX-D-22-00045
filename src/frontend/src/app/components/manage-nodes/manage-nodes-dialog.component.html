@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Edit node data</h2>
+<mat-dialog-content>
+  <form [formGroup]="nodeDataForm">
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Name *" formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="IP address *" formControlName="ip_address">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="number" matInput placeholder="Port number *" formControlName="port_number">
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxFlex fxLayoutAlign="center center">
+    <button mat-raised-button color="warn" [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="nodeDataForm.value"
+      [disabled]="nodeDataForm.invalid">Save</button>
+  </div>
+</mat-dialog-actions>

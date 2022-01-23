@@ -1,0 +1,12 @@
+### Login
+POST https://127.0.0.1:8080/restful/auth/login HTTP/1.1
+Content-Type: application/json
+
+{  
+    "username": "Proba",  
+    "password": "4e7f3744047d744909f5d0b8ce8138d7"  
+}
+
+### Refresh token
+POST https://127.0.0.1:8080/restful/auth/refresh_token HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNTAxOTM3ODAxLCJpZCI6IlByb2JhIiwib3JpZ19pYXQiOjE1MDE5Mzc1MDF9.u2_7blKu_-42BPETAJ2Ft9DxoCWlMXPAnetdBVBQLsQ

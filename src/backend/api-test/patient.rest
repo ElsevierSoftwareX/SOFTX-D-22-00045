@@ -1,0 +1,20 @@
+### Finds patient data by insurance number
+POST https://127.0.0.1:8080/restful/patient/find-by-insurance-number HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNTAyODA3ODUwLCJpZCI6IlByb2JhIiwib3JpZ19pYXQiOjE1MDI4MDc1NTB9.P2sLuxyTmykVP0MwYouV2dlV4LjmrOIo60i9CWdaJF8
+Content-Type: application/json
+
+{
+    "insurance_number": "1234567890123"
+}
+
+### Finds patient data by first and last name
+POST https://127.0.0.1:8080/restful/patient/find-by-name HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNTAyODA3ODUwLCJpZCI6IlByb2JhIiwib3JpZ19pYXQiOjE1MDI4MDc1NTB9.P2sLuxyTmykVP0MwYouV2dlV4LjmrOIo60i9CWdaJF8
+Content-Type: application/json
+
+{
+    "first_name": "Krešimir",
+    "last_name": "Jozić"
+}

@@ -1,0 +1,135 @@
+<div class="full-height" fxLayout="column">
+
+
+  <div fxLayout="row" style="flex-grow: 1; overflow: auto;">
+    <img #image class="max-dimensions">
+
+    <div *ngIf="data.imageData.frames > 1" class="column-width" fxLayout="column">
+      <h4 class="margins-10 margins-vertical-10">View position</h4>
+      <div class="full-width">
+        <span class="margins-10">
+          X = {{viewX}}
+        </span>
+        <span class="margins-10">
+          Y = {{viewY}}
+        </span>
+        <span class="margins-10">
+          Z = {{viewZ}}
+        </span>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="viewX" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="viewY" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="viewZ" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <h4 class="margins-10 margins-vertical-10">Translation</h4>
+      <div class="full-width">
+        <span class="margins-10">
+          X = {{translateX}}
+        </span>
+        <span class="margins-10">
+          Y = {{translateY}}
+        </span>
+        <span class="margins-10">
+          Z = {{translateZ}}
+        </span>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="translateX" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="translateY" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="translateZ" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <h4 class="margins-10 margins-vertical-10">Rotation</h4>
+      <div class="full-width">
+        <span class="margins-10">
+          X = {{rotateX}}
+        </span>
+        <span class="margins-10">
+          Y = {{rotateY}}
+        </span>
+        <span class="margins-10">
+          Z = {{rotateZ}}
+        </span>
+        <span class="margins-10">
+          Angle = {{rotateAngle}}
+        </span>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="rotateX" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="rotateY" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="rotateZ" [max]="vectorMax" [min]="vectorMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="rotateAngle" [max]="angleMax" [min]="angleMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <h4 class="margins-10 margins-vertical-10">Other options</h4>
+      <div class="full-width">
+        <span class="margins-10">
+          Gamma = {{gammaValue / 10.0}}
+        </span>
+      </div>
+      <div>
+        <mat-slider [(ngModel)]="gammaValue" [max]="gammaMax" [min]="gammaMin" class="grow" class="full-width">
+        </mat-slider>
+      </div>
+      <div>
+        <mat-radio-group [(ngModel)]="renderingMode">
+          <mat-radio-button class="margins-10" value="1">Projection</mat-radio-button>
+          <mat-radio-button class="margins-10" value="2">Blending</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <span *ngIf="data.imageData.frames > 1" class="margins-10">
+      Frame {{frameValue + 1}} of {{data.imageData.frames}}
+    </span>
+    <mat-icon (click)="decreaseSlider()" *ngIf="data.imageData.frames > 1" class="margin-left-10"
+      fontIcon="md-keyboard_arrow_left" fontSet="material-icons"></mat-icon>
+    <mat-slider (valueChange)="sliderChangeValue()" *ngIf="data.imageData.frames > 1" [(ngModel)]="frameValue"
+      [max]="frameMax" [min]="frameMin" class="grow"></mat-slider>
+    <mat-icon (click)="increaseSlider()" *ngIf="data.imageData.frames > 1" class="margin-right-10"
+      fontIcon="md-keyboard_arrow_right" fontSet="material-icons"></mat-icon>
+    <mat-icon (click)="sliderLink()" *ngIf="data.imageData.frames > 1" [fontIcon]="linkIcon" class="margin-right-10"
+      fontSet="material-icons"></mat-icon>
+    <mat-form-field appearance="standard" class="select-width margins-10">
+      <select (change)="changeResolutionAndFormat($event)" [value]="imageFormat" matNativeControl>
+        <option value="webp">WebP</option>
+        <option value="jpeg">JPEG</option>
+        <option value="png">PNG</option>
+      </select>
+    </mat-form-field>
+    <button (click)="getFrame()" [disabled]="!buttonEnabled" class="margins-10" color="primary" mat-raised-button>
+      Get frame
+    </button>
+    <button (click)="getVolume()" *ngIf="data.imageData.frames > 1" [disabled]="!buttonEnabled" class="margins-10"
+      color="primary" mat-raised-button>
+      Get volume
+    </button>
+    <button (click)="close()" [mat-dialog-close]="null" class="margins-10" color="warn" mat-raised-button>
+      Close
+    </button>
+  </div>
+</div>

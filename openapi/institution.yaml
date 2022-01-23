@@ -1,0 +1,691 @@
+openapi: 3.0.3
+servers:
+  - url: "https://localhost:8080/restful"
+info:
+  title: Institution server API
+  description: RESTful API for institution server
+  version: 1.0.0
+  contact:
+    name: Krešimir Jozić
+    email: kjozic@gmail.com
+  license:
+    name: MIT
+paths:
+  /info/ping:
+    post:
+      summary: Ping server
+      tags:
+        - info
+        - admin_access
+      description: |
+        The /info/ping endpoint is used to ping server.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Used to check if server is running.
+  /node/persist:
+    post:
+      summary: Insert or update existing node data in database
+      tags:
+        - node
+        - superuser_access
+      description: >
+        The /node/persist endpoint is used to insert data about the new node or
+        to update data from existing node.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Node data was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/nodeData"
+  /node/get-all:
+    post:
+      summary: Get list of all nodes
+      tags:
+        - node
+        - regular_access
+      description: |
+        The /node/get-all endpoint is used to fetch data of all nodes.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: List of all nodes was sucessfully fetched.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/nodeData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+  /node/get:
+    post:
+      summary: Get node data
+      tags:
+        - node
+        - regular_access
+      description: |
+        The /node/get endpoint is used to find node data by name.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Node data was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/nodeData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /node/delete:
+    post:
+      summary: Delete node
+      tags:
+        - node
+        - superuser_access
+      description: |
+        The /node/delete endpoint is used to delete node.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Node data was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /image/find-by-patient:
+    post:
+      summary: Find image by patient
+      tags:
+        - image
+        - regular_access
+      description: |
+        The /image/find-by-patient endpoint is used to find image metadata by patient.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image metadata was successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/imageSearchResults"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findByPatient"
+  /image/get:
+    post:
+      summary: Get image
+      tags:
+        - image
+        - regular_access
+      description: |
+        The /image/get endpoint is used to get image metadata.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image metadata was successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/imageData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /image/persist:
+    post:
+      summary: Insert or update image metadata in database
+      tags:
+        - image
+        - regular_access
+      description: |
+        The /image/persist is used to insert or update image metadata in database.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image metadata was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/imageData"
+  /image/delete:
+    post:
+      summary: Delete image metadata.
+      tags:
+        - image
+        - regular_access
+      description: |
+        The /image/delete is used to delete image metadata.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image metadata was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /radiology-report/persist:
+    post:
+      summary: Insert or update radiology report in database
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/persist is used to insert or update radiology report in database.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Radiology report was successfully saved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recordId"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/radiologyReportData"
+  /radiology-report/delete:
+    post:
+      summary: Delete radiology report.
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/delete is used to delete radiology report.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Radiology report was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /radiology-report/find-by-patient:
+    post:
+      summary: Find radiology report by patient
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/find-by-patient endpoint is used to find radiology report by patient.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Radiology report was successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/radiologyReportSearchResults"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findByPatient"
+  /radiology-report/get:
+    post:
+      summary: Get radiology report
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/get endpoint is used to get radiology report.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Radiology report was successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/radiologyReportData"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /radiology-report/attach-image:
+    post:
+      summary: Attaches image to radiology report
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/attach-images is used to attach image to radiology report.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image sucessfully attached to radiology report.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/attachImageToRadiologyReportRequest"
+  /radiology-report/detach-image:
+    post:
+      summary: Detach image from radiology report. Record ID is ID from table Radiology_report_images, not ID of image or ID of radiology report.
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/detach-image is used to detach image from radiology report.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image sucessfully dettached from radiology report.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /radiology-report/list-images:
+    post:
+      summary: List images for radiology report.
+      tags:
+        - radiology_report
+        - regular_access
+      description: |
+        The /radiology-report/list-images is used to list images for radiology report.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Radiology report images were successfully found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/radiologyReportImage"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorQueryingDatabase"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+components:
+  schemas:
+    recordId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+    nodeData:
+      type: object
+      required:
+        - id
+        - name
+        - ip_address
+        - port_number
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        name:
+          type: string
+          example: Node1
+        ip_address:
+          type: string
+          format: ipv4
+          example: 127.0.0.1
+        port_number:
+          type: integer
+          format: int32
+          example: 8080
+    imageData:
+      type: object
+      required:
+        - id
+        - date_and_time
+        - image_type
+        - node
+        - patient
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        date_and_time:
+          type: string
+          format: date-time
+          example: "2017-07-21T17:32:28Z"
+        image_type:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        node:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        patient:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        description:
+          type: string
+          example: CT of head
+        checksum:
+          type: string
+          description: MD5 encoded file content.
+          minLength: 32
+          maxLength: 32
+          example: C4CA4238A0B923820DCC509A6F75849B
+        rows:
+          type: integer
+          format: int32
+          description: Number of rows
+          example: 1024
+        cols:
+          type: integer
+          format: int32
+          description: Number of cols
+          example: 1024
+        frames:
+          type: integer
+          format: int32
+          description: Number of frames
+          example: 1024
+        rescale_slope:
+          type: number
+          description: Rescale slope
+          example: 1.0
+        rescale_intercept:
+          type: number
+          description: Rescale intercept
+          example: 0.0
+        window_center:
+          type: number
+          description: Window center
+          example: 0.0
+        window_width:
+          type: number
+          description: Rescale slope
+          example: 1.0
+    imageSearchResults:
+      type: object
+      required:
+        - image
+        - imageData
+      properties:
+        institution:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        imageData:
+          $ref: "#/components/schemas/imageData"
+    findByPatient:
+      type: object
+      required:
+        - institution
+        - patient
+      properties:
+        institution:
+          type: string
+          description: This field is not used for search on the backend but only copied back to frontend (request/response parameter juggling).
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        patient:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+    radiologyReportSearchResults:
+      type: object
+      required:
+        - institution
+        - radiologyReportData
+      properties:
+        institution:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        radiologyReportData:
+          $ref: "#/components/schemas/radiologyReportData"
+    radiologyReportData:
+      type: object
+      required:
+        - id
+        - description
+        - findings
+        - conclusion
+        - date_and_time
+        - patient
+        - doctor_of_medicine
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        description:
+          type: string
+          example: Some text ...
+        findings:
+          type: string
+          example: Some text ...
+        conclusion:
+          type: string
+          example: Some text ...
+        recommendation:
+          type: string
+          example: Some text ...
+        date_and_time:
+          type: string
+          format: date-time
+          example: "2017-07-21T17:32:28Z"
+        patient:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        doctor_of_medicine:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+    attachImageToRadiologyReportRequest:
+      type: object
+      required:
+        - id
+        - radiology_report
+        - institution
+        - image
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        radiology_report:
+          type: string
+          description: Radiology report is stored on the server of the institution to which the user who writes it belongs.
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        institution:
+          type: string
+          description: The image can be located on the server of any institution, so it is necessary to store information about which institution it is located in.
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        image:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+    radiologyReportImage:
+      type: object
+      required:
+        - id
+        - radiology_report
+        - institution
+        - image
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        radiology_report:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        institution:
+          type: string
+          description: The image can be located on the server of any institution, so it is necessary to store information about which institution it is located in.
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        image:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+  securitySchemes:
+    JWTToken:
+      type: http
+      description: JWT token
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    ErrorUnauthorized:
+      description: User is not authorized for this action.
+    ErrorQueryingDatabase:
+      description: Error while querying database.
+    ErrorParsingRequest:
+      description: Error while parsing request data.
+    ErrorDeletingRecord:
+      description: Error while deleting record.
+    ErrorNotFound:
+      description: Endpoint not found.
+tags:
+  - name: info
+  - name: node
+  - name: image
+  - name: radiology_report
+  - name: admin_access
+    description: Path can be accessed only by administrator.
+  - name: superuser_access
+    description: Path can be accessed only by superuser.
+  - name: regular_access
+    description: Path can be accessed by regular users.

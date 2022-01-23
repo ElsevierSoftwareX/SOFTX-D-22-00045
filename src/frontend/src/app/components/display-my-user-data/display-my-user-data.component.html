@@ -1,0 +1,49 @@
+<mat-card>
+
+  <mat-card-header>
+    <mat-card-title>My user data</mat-card-title>
+  </mat-card-header>
+
+  <mat-divider [inset]="true"></mat-divider>
+
+  <mat-card-content>
+
+    <br>
+
+    <div gdColumns="150px 250px" gdGap="10px 10px">
+      <span>Institution name:</span>
+      <span>{{myUserData.institution_data.name}}</span>
+
+      <span>Institution address:</span>
+      <span>{{myUserData.institution_data.address}}</span>
+
+      <span>First name:</span>
+      <span>{{myUserData.user_data.first_name}}</span>
+
+      <span>Last name:</span>
+      <span>{{myUserData.user_data.last_name}}</span>
+
+      <span>Username:</span>
+      <span>{{myUserData.user_data.username}}</span>
+
+      <span>Address:</span>
+      <span>{{myUserData.user_data.address}}</span>
+
+      <span>Email:</span>
+      <span>{{myUserData.user_data.email}}</span>
+
+      <span>Phone:</span>
+      <span>{{myUserData.user_data.phone}}</span>
+
+      <span>Doctor of medicine:</span>
+      <span>{{myUserData.user_data.doctor_of_medicine}}</span>
+
+      <span>Administrator:</span>
+      <span>{{myUserData.user_data.administrator}}</span>
+
+      <span>Superuser:</span>
+      <span>{{myUserData.user_data.superuser}}</span>
+    </div>
+
+  </mat-card-content>
+</mat-card>

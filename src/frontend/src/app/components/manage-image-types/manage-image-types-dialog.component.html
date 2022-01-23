@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Edit image types</h2>
+<mat-dialog-content>
+  <form [formGroup]="imageTypeForm">
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Description *" formControlName="description">
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxFlex fxLayoutAlign="center center">
+    <button mat-raised-button color="warn" [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="imageTypeForm.value"
+      [disabled]="imageTypeForm.invalid">Save</button>
+  </div>
+</mat-dialog-actions>

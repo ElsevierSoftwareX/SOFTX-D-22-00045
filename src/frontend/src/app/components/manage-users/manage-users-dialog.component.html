@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Edit user data</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="userDataForm">
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Username *" formControlName="username">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="password" matInput placeholder="Password *" formControlName="password">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="First name *" formControlName="first_name">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Last name *" formControlName="last_name">
+      </mat-form-field>
+
+      <mat-checkbox formControlName="active" class="input-width">Active *</mat-checkbox>
+
+      <mat-checkbox formControlName="administrator" class="input-width">Administrator *</mat-checkbox>
+
+      <mat-checkbox formControlName="superuser" class="input-width">Superuser *</mat-checkbox>
+
+      <mat-checkbox formControlName="doctor_of_medicine" class="input-width">MD *</mat-checkbox>
+
+      <mat-form-field class="input-width">
+        <mat-select placeholder="Institution *" formControlName="institution">
+          <mat-option *ngFor="let inst of institutions" [value]="inst.id">
+            {{inst.name + ", " + inst.address}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Address" formControlName="address">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="number" matInput placeholder="Phone" formControlName="phone">
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxFlex fxLayoutAlign="center center">
+    <button mat-raised-button color="warn" [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="userDataForm.value"
+      [disabled]="userDataForm.invalid">Save</button>
+  </div>
+</mat-dialog-actions>

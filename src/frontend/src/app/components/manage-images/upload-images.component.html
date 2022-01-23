@@ -1,0 +1,77 @@
+<mat-card fxLayout="column">
+
+  <mat-card-header>
+    <mat-card-title>Upload images</mat-card-title>
+  </mat-card-header>
+
+  <mat-divider [inset]="true"></mat-divider>
+
+  <mat-card-content fxLayout="column">
+
+    <form #form (ngSubmit)="saveImageData(form)" [formGroup]="saveImageDataForm" fxFlexOffset="20px" fxLayout="column"
+          fxLayoutAlign="start start">
+
+      <mat-form-field class="input-width">
+        <mat-label>Date and time: *</mat-label>
+
+        <input [matDatepicker]="picker" formControlName="dateTime" matInput>
+        <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <mat-label>Image type: *</mat-label>
+        <mat-select formControlName="imageType">
+          <mat-option *ngFor="let type of imageTypes" [value]="type.id">
+            {{type.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <mat-label>Node: *</mat-label>
+        <mat-select formControlName="node">
+          <mat-option *ngFor="let node of nodes" [value]="node.id">
+            {{node.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <mat-label>Patient: *</mat-label>
+        <input (click)="selectPatient()" formControlName="patient" matInput matTooltip="Click to show patient search dialog"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <mat-label>Description: *</mat-label>
+        <textarea formControlName="description" matInput></textarea>
+      </mat-form-field>
+
+      <!-- This elements are not part of the form. This is workaround for node selection and file upload. -->
+      <mat-form-field class="input-width">
+        <mat-label>File name: *</mat-label>
+        <input #openFile1 (click)="openFile2.click()" matInput
+               matTooltip="First select the node and then click here to show file open dialog." readonly>
+      </mat-form-field>
+
+      <input #openFile2 (change)="onFileChange()" hidden type="file">
+
+      <mat-progress-bar [value]="uploadProgress" class="input-width" mode="determinate"></mat-progress-bar>
+      <!-- End of workaround. -->
+
+      <div class="input-width center-align" fxFlexOffset="30px" fxLayout="row" fxLayoutAlign="center center"
+           fxLayoutGap="20px">
+        <!-- This element is not part of the form. This is workaround for node selection and file upload. -->
+        <button (click)="uploadImage()" [disabled]="(openFile1.value.length === 0) || (this.saveImageDataForm.get('node').value.length === 0)" color="primary" mat-raised-button
+                type="button">
+          Upload file
+        </button>
+        <!-- End of workaround. -->
+
+      </div>
+
+    </form>
+
+  </mat-card-content>
+</mat-card>

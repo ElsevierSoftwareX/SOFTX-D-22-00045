@@ -1,0 +1,6 @@
+/dist
+/node_modules
+/.gradle
+*.log
+package-lock.json
+.angular/

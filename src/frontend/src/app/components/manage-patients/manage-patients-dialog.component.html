@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Edit patient data</h2>
+<mat-dialog-content>
+  <form [formGroup]="patientDataForm">
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="First name *" formControlName="first_name">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Last name *" formControlName="last_name">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <mat-select placeholder="Gender *" formControlName="gender">
+          <mat-option value="M">Male</mat-option>
+          <mat-option value="F">Female</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input matInput [matDatepicker]="picker" placeholder="Date of birth *" formControlName="date_of_birth">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="number" matInput placeholder="Insurance number *" formControlName="insurance_number">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Address" formControlName="address">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="text" matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field class="input-width">
+        <input type="string" matInput placeholder="Phone" formControlName="phone">
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxFlex fxLayoutAlign="center center">
+    <button mat-raised-button color="warn" [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="patientDataForm.value"
+      [disabled]="patientDataForm.invalid">Save</button>
+  </div>
+</mat-dialog-actions>

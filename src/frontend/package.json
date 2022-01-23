@@ -1,0 +1,52 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "build": "ng build --configuration production --aot --output-path ../backend/web/",
+    "start": "ng serve --ssl true --ssl-key key.pem --ssl-cert cert.pem",
+    "lint": "npx eslint . --ext .ts"
+  },
+  "dependencies": {
+    "@angular/animations": "^13.0.3",
+    "@angular/cdk": "^13.0.3",
+    "@angular/common": "^13.0.3",
+    "@angular/compiler": "^13.0.3",
+    "@angular/core": "^13.0.3",
+    "@angular/flex-layout": "13.0.0-beta.36",
+    "@angular/forms": "^13.0.3",
+    "@angular/material": "^13.0.3",
+    "@angular/material-moment-adapter": "^13.0.3",
+    "@angular/platform-browser": "^13.0.3",
+    "@angular/platform-browser-dynamic": "^13.0.3",
+    "@angular/router": "^13.0.3",
+    "@auth0/angular-jwt": "latest",
+    "@material-icons/font": "^1.0.25",
+    "jwt-decode": "latest",
+    "moment": "latest",
+    "roboto-fontface": "latest",
+    "rxjs": "^7.5.2",
+    "ts-md5": "latest",
+    "tslib": "latest",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^13.0.4",
+    "@angular-eslint/builder": "^13.0.1",
+    "@angular-eslint/eslint-plugin": "^13.0.1",
+    "@angular-eslint/eslint-plugin-template": "^13.0.1",
+    "@angular-eslint/schematics": "^13.0.1",
+    "@angular-eslint/template-parser": "^13.0.1",
+    "@angular/cli": "^13.0.4",
+    "@angular/compiler-cli": "^13.0.3",
+    "@angular/language-service": "^13.0.3",
+    "@types/node": "^16.11.11",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "eslint": "^8.7.0",
+    "ts-node": "latest",
+    "typescript": "4.4.4",
+    "webpack": "^5.67.0"
+  }
+}

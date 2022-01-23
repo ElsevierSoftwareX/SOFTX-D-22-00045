@@ -1,0 +1,24 @@
+.full-width {
+  width: 100%;
+}
+
+.input-width {
+  width: 450px;
+}
+
+.margins {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.center-align {
+  text-align: center;
+}
+
+mat-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}

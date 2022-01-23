@@ -1,0 +1,17 @@
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div class="login-container" fxLayout="column" fxLayoutAlign="center center">
+
+    <mat-form-field class="input-width">
+      <input type="text" matInput placeholder="Username" formControlName="username">
+    </mat-form-field>
+
+    <mat-form-field class="input-width">
+      <input type="password" matInput placeholder="Password" formControlName="password">
+    </mat-form-field>
+
+    <div class="center-align input-width" fxFlexOffset="30px">
+      <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Login</button>
+    </div>
+
+  </div>
+</form>

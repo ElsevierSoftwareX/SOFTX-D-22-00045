@@ -1,0 +1,90 @@
+<mat-card fxLayout="column">
+
+  <mat-card-header>
+    <mat-card-title>Manage images</mat-card-title>
+  </mat-card-header>
+
+  <mat-divider [inset]="true"></mat-divider>
+
+  <mat-card-content fxFlex fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <form [formGroup]="findByPatientForm" (ngSubmit)="findImagesByPatient()">
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+          <mat-form-field class="input-width">
+            <input type="text" matInput readonly placeholder="Patient" formControlName="patient">
+          </mat-form-field>
+
+          <div fxFlexOffset="30px">
+            <button type="button" mat-raised-button color="primary" (click)="selectPatient()">Find patient</button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="findByPatientForm.invalid"
+                    fxFlexOffset="20px">Search images
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <mat-divider [inset]="true"></mat-divider>
+
+    <mat-form-field class="full-width">
+      <input matInput (keyup)="tableFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+
+    <div fxFlex style="overflow: auto;">
+
+      <table mat-table [dataSource]="images" matSort class="full-width">
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? tableSelection.toggle(row) : null"
+                          [checked]="tableSelection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date_and_time">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date and time</th>
+          <td mat-cell *matCellDef="let element"> {{element.date_and_time | date:'dd.MM.yyyy.'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="image_type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Image type</th>
+          <td mat-cell *matCellDef="let element"> {{getImageTypeName(element.image_type)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="node">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Node</th>
+          <td mat-cell *matCellDef="let element"> {{getNodeName(element.node)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+  </mat-card-content>
+  <mat-card-actions>
+
+    <div class="center-align">
+      <button mat-raised-button color="primary" [disabled]="tableSelection.isEmpty()" class="margins"
+              (click)="editImage()">Edit
+      </button>
+      <button mat-raised-button color="primary" [disabled]="tableSelection.isEmpty()"
+              (click)="deleteImage()">Delete
+      </button>
+    </div>
+
+  </mat-card-actions>
+</mat-card>

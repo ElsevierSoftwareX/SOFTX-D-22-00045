@@ -1,0 +1,112 @@
+<div class="container">
+
+  <mat-sidenav-container class="full-height">
+    <mat-sidenav mode="side" opened class="sidenav-width">
+      <mat-accordion>
+
+        <mat-expansion-panel *ngIf="isUserAdmin()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon fontSet="material-icons" fontIcon="md-supervisor_account"></mat-icon>
+              Administration
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/manage-institutions">
+              <mat-icon fontSet="material-icons" fontIcon="md-account_balance"></mat-icon>
+              Institutions
+            </a>
+            <a mat-button color="primary" routerLink="/main/manage-users">
+              <mat-icon fontSet="material-icons" fontIcon="md-people_outline"></mat-icon>
+              Users
+            </a>
+            <a mat-button color="primary" routerLink="/main/manage-image-types">
+              <mat-icon fontSet="material-icons" fontIcon="md-burst_mode"></mat-icon>
+              Image types
+            </a>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="isUserSuperuser()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon fontSet="material-icons" fontIcon="md-storage"></mat-icon>
+              Nodes
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/manage-nodes">
+              <mat-icon fontSet="material-icons" fontIcon="md-edit"></mat-icon>
+              Edit nodes
+            </a>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon fontSet="material-icons" fontIcon="md-work"></mat-icon>
+              Workflow
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/manage-patients">
+              <mat-icon fontSet="material-icons" fontIcon="md-people"></mat-icon>
+              Patients
+            </a>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/upload-images">
+              <mat-icon fontSet="material-icons" fontIcon="md-cloud_upload"></mat-icon>
+              Upload images
+            </a>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/manage-images">
+              <mat-icon fontSet="material-icons" fontIcon="md-wb_iridescent"></mat-icon>
+              Manage images
+            </a>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/manage-radiology-reports">
+              <mat-icon fontSet="material-icons" fontIcon="md-description"></mat-icon>
+              Radiology reports
+            </a>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon fontSet="material-icons" fontIcon="md-account_circle"></mat-icon>
+              My account
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <a mat-button color="primary" routerLink="/main/display-my-user-data">
+              <mat-icon fontSet="material-icons" fontIcon="md-perm_identity"></mat-icon>
+              Display my user data
+            </a>
+            <a mat-button color="primary" routerLink="/main/change-password">
+              <mat-icon fontSet="material-icons" fontIcon="md-https"></mat-icon>
+              Change password
+            </a>
+            <a mat-button color="primary" routerLink="" (click)="stopTimer();">
+              <mat-icon fontSet="material-icons" fontIcon="md-exit_to_app"></mat-icon>
+              Logout
+            </a>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</div>

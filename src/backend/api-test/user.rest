@@ -1,0 +1,9 @@
+### Get data for user which is logged in
+POST https://127.0.0.1:8080/restful/user/get-my-data HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNTAxOTM4MDQ3LCJpZCI6IlByb2JhIiwib3JpZ19pYXQiOjE1MDE5Mzc3NDd9.EfI0cRZbZxKB8ilUsDp8Cn-49mUvRMXOlcLSNr3OZ3I
+
+### Get data for all users
+POST https://127.0.0.1:8080/restful/user/get-all HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNTAxODgzNjYxLCJpZCI6IlByb2JhIiwib3JpZ19pYXQiOjE1MDE4ODMzNjF9.kLY5zzhy6_EcoIKGbSejELwX9DGeqDVLPPFEFGi2KpM

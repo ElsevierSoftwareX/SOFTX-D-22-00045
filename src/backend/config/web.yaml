@@ -1,0 +1,6 @@
+name: "Web server"
+serverType: "web"
+address: "127.0.0.1"
+port: 8080
+JWTPassword: "secret"
+debug: true

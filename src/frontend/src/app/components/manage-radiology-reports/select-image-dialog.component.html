@@ -1,0 +1,64 @@
+<mat-card fxLayout="column">
+
+  <mat-card-header>
+    <mat-card-title>Select image</mat-card-title>
+  </mat-card-header>
+
+  <mat-divider [inset]="true"></mat-divider>
+
+  <mat-card-content fxFlex fxLayout="column">
+
+    <mat-form-field class="full-width">
+      <input (keyup)="tableFilter($event.target.value)" matInput placeholder="Filter">
+    </mat-form-field>
+
+    <div class="full-width" fxFlex>
+      <table [dataSource]="images" class="full-width" mat-table matSort>
+
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let row" mat-cell>
+            <mat-checkbox (change)="$event ? tableSelection.toggle(row) : null" (click)="$event.stopPropagation()"
+                          [checked]="tableSelection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="institution">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Institution</th>
+          <td *matCellDef="let element"
+              mat-cell> {{findInstitutionFromID(element.institution).name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="imageType">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Institution</th>
+          <td *matCellDef="let element"
+              mat-cell> {{findImageTypeFromID(element.imageData.image_type).description}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
+          <td *matCellDef="let element"
+              mat-cell> {{element.imageData.date_and_time | date:'dd.MM.yyyy.'}} </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns; sticky: true;" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+
+      </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <div fxLayoutAlign="center center">
+      <div class="center-align">
+        <button [mat-dialog-close]="null" color="warn" mat-raised-button>Cancel</button>
+        <button [disabled]="tableSelection.selected.length !== 1" [mat-dialog-close]="this.tableSelection.selected[0]"
+                color="primary" mat-raised-button>Select
+        </button>
+      </div>
+    </div>
+  </mat-card-actions>
+</mat-card>

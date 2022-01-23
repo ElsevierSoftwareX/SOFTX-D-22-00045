@@ -1,0 +1,436 @@
+openapi: 3.0.3
+servers:
+  - url: "https://localhost:8080/restful"
+info:
+  title: Node server API
+  description: RESTful API for node server
+  version: 1.0.0
+  contact:
+    name: Krešimir Jozić
+    email: kjozic@gmail.com
+  license:
+    name: MIT
+paths:
+  /info/ping:
+    post:
+      summary: Ping server
+      tags:
+        - info
+        - admin_access
+      description: |
+        The /info/ping endpoint is used to ping server.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Used to check if server is running.
+  /storage/save-image:
+    post:
+      summary: Save image
+      tags:
+        - storage
+        - regular_access
+      description: |
+        The /storage/save-image endpoint is used to save image.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: File checksum (used as a file name).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/imageInfo"
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/fileUpload"
+  /storage/delete-image:
+    post:
+      summary: Delete image
+      tags:
+        - storage
+        - regular_access
+      description: |
+        The /storage/delete-image endpoint is used to delete image.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: File was successfully deleted.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recordId"
+  /render/load-image:
+    post:
+      summary: Load image
+      tags:
+        - render
+        - regular_access
+      description:
+        The /storage/load-image endpoint is used to load image.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image was loaded successfully.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/imageInfo"
+  /render/unload-image:
+    post:
+      summary: Unload image
+      tags:
+        - render
+        - regular_access
+      description:
+        The /storage/unload-image endpoint is used to unload image.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Image was unloaded successfully.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/checksum"
+  /render/fetch-frame:
+    post:
+      summary: Fetch frame
+      tags:
+        - render
+        - regular_access
+      description:
+        The /storage/fetch-frame endpoint is used to fetch image frame.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Frame fetched successfully.
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: byte
+                description: Base64 encoded jpeg image
+                example: U3dhZ2dlciByb2Nrcw==
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/frameNumber"
+  /render/fetch-volume:
+    post:
+      summary: Fetch frame
+      tags:
+        - render
+        - regular_access
+      description:
+        The /storage/fetch-frame endpoint is used to fetch image frame.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Frame fetched successfully.
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: byte
+                description: PNG, JPEG or WebP image
+                example: U3dhZ2dlciByb2Nrcw==
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/volumeParameters"
+  /render/set-resolution-and-format:
+    post:
+      summary: Set image resolution and format
+      tags:
+        - render
+        - regular_access
+      description:
+        The /storage/set-resolution-and-format endpoint is used to set image resolution and format.
+      security:
+        - JWTToken: []
+      responses:
+        "200":
+          description: Resolution and format set successfully.
+        "400":
+          $ref: "#/components/responses/ErrorParsingRequest"
+        "401":
+          $ref: "#/components/responses/ErrorUnauthorized"
+        "500":
+          $ref: "#/components/responses/ErrorDeletingRecord"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/resolutionAndFormat"
+components:
+  schemas:
+    imageInfo:
+      type: object
+      required:
+        - md5sum
+        - rows
+        - cols
+        - frames
+      properties:
+        md5sum:
+          type: string
+          description: MD5 encoded file content.
+          minLength: 32
+          maxLength: 32
+          example: C4CA4238A0B923820DCC509A6F75849B
+        rows:
+          type: integer
+          format: int32
+          description: Number of rows
+          example: 1024
+        cols:
+          type: integer
+          format: int32
+          description: Number of cols
+          example: 1024
+        frames:
+          type: integer
+          format: int32
+          description: Number of frames
+          example: 1024
+        rescale_slope:
+          type: number
+          description: Rescale slope
+          example: 1.0
+        rescale_intercept:
+          type: number
+          description: Rescale intercept
+          example: 0.0
+        window_center:
+          type: number
+          description: Window center
+          example: 0.0
+        window_width:
+          type: number
+          description: Rescale slope
+          example: 1.0
+    fileUpload:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          type: string
+          format: binary
+          description: File content
+          example: aB$13c!
+    recordId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+    frameNumber:
+      type: object
+      required:
+        - md5sum
+        - frame
+      properties:
+        md5sum:
+          type: string
+          minLength: 32
+          maxLength: 32
+          example: C4CA4238A0B923820DCC509A6F75849B
+        frame:
+          type: integer
+          format: int32
+          description: Frame number
+          example: 5
+    volumeParameters:
+      type: object
+      required:
+        - md5sum
+        - viewX
+        - viewY
+        - viewZ
+        - translateX
+        - translateY
+        - translateZ
+        - rotateX
+        - rotateY
+        - rotateZ
+        - rotateAngle
+      properties:
+        md5sum:
+          type: string
+          minLength: 32
+          maxLength: 32
+          example: C4CA4238A0B923820DCC509A6F75849B
+        viewX:
+          type: number
+          format: float
+          description: X coordinate of viewer position
+          example: 0
+        viewY:
+          type: number
+          format: float
+          description: Y coordinate of viewer position
+          example: 0
+        viewZ:
+          type: number
+          format: float
+          description: Z coordinate of viewer position
+          example: 2
+        translateX:
+          type: number
+          format: float
+          description: X coordinate of translation vector
+          example: 5
+        translateY:
+          type: number
+          format: float
+          description: Y coordinate of translation vector
+          example: 5
+        translateZ:
+          type: number
+          format: float
+          description: Z coordinate of translation vector
+          example: 5
+        rotateX:
+          type: number
+          format: float
+          description: X coordinate of rotation vector
+          example: 0
+        rotateY:
+          type: number
+          format: float
+          description: Y coordinate of rotation vector
+          example: 1
+        rotateZ:
+          type: number
+          format: float
+          description: Z coordinate of rotation vector
+          example: 0
+        rotateAngle:
+          type: number
+          format: float
+          description: Rotation angle around vector
+          example: 0
+        gamma:
+            type: number
+            format: float
+            description: Gamma value
+            example: 2.2
+        renderingMode:
+            type: integer
+            format: int32
+            description: Selection of rendering mode (maximum intensity projection or front to back blending)
+            example: 1
+    checksum:
+      type: object
+      required:
+        - md5sum
+      properties:
+        md5sum:
+          type: string
+          minLength: 32
+          maxLength: 32
+          example: C4CA4238A0B923820DCC509A6F75849B
+    resolutionAndFormat:
+      type: object
+      required:
+        - md5sum
+        - width
+        - height
+        - format
+      properties:
+        md5sum:
+          type: string
+          minLength: 32
+          maxLength: 32
+          example: C4CA4238A0B923820DCC509A6F75849B
+        width:
+          type: integer
+          format: int32
+          description: Image width
+          example: 800
+        height:
+          type: integer
+          format: int32
+          description: Image height
+          example: 600
+        format:
+          type: string
+          description: Image format
+          example: PNG
+  securitySchemes:
+    JWTToken:
+      type: http
+      description: JWT token
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    ErrorUnauthorized:
+      description: User is not authorized for this action.
+    ErrorQueryingDatabase:
+      description: Error while querying database.
+    ErrorParsingRequest:
+      description: Error while parsing request data.
+    ErrorDeletingRecord:
+      description: Error while deleting record.
+    ErrorNotFound:
+      description: Endpoint not found.
+tags:
+  - name: info
+  - name: storage
+  - name: render
+  - name: admin_access
+    description: Path can be accessed only by administrator.
+  - name: regular_access
+    description: Path can be accessed by regular users.
