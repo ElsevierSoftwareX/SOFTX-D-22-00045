@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/restful/node/render"
 	"embed"
 	"errors"
 	"flag"
@@ -11,7 +12,6 @@ import (
 	"runtime"
 	"strconv"
 	"syscall"
-	"backend/restful/node/render"
 	"time"
 
 	"backend/env"
@@ -70,9 +70,16 @@ func main() {
 	} else {
 		router = gin.New()
 		config := cors.DefaultConfig()
-		config.AllowHeaders = []string{"Authorization", "Content-Type"}
-		config.AllowAllOrigins = true
+		config.AllowHeaders = []string{"X-PINGOTHER", "Authorization", "Content-Type", "Origin"}
+		//		config.AllowAllOrigins = true
+		config.AllowOrigins = []string{"https://sivr.info:5000", "https://sivr.info:5001", "https://sivr.info:5002", "https://sivr.info:5003"}
 		config.AllowMethods = []string{"GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"}
+		config.ExposeHeaders = []string{"Content-Length"}
+		config.AllowCredentials = true
+		config.AllowOriginFunc = func(origin string) bool {
+			return origin == "https://sivr.info:5000/"
+		}
+
 		router.Use(cors.New(config))
 	}
 
@@ -152,7 +159,7 @@ func startWebServer() {
 	router.StaticFS("staticFiles", http.FS(staticHtmlFiles))
 
 	err := http3.ListenAndServe(env.ServerConfiguration.Address+":"+strconv.Itoa(int(env.ServerConfiguration.Port)),
-		"config/cert.pem", "config/key.pem", router)
+		env.ServerConfiguration.CertFile, env.ServerConfiguration.KeyFile, router)
 
 	if err != nil {
 		panic("Could not start server.")
@@ -214,7 +221,7 @@ func startToplevelServer() {
 	}
 
 	err := http3.ListenAndServe(env.ServerConfiguration.Address+":"+strconv.Itoa(int(env.ServerConfiguration.Port)),
-		"config/cert.pem", "config/key.pem", router)
+		env.ServerConfiguration.CertFile, env.ServerConfiguration.KeyFile, router)
 
 	if err != nil {
 		panic("Could not start server.")
@@ -263,7 +270,7 @@ func startMainInstitutionServer() {
 	}
 
 	err := http3.ListenAndServe(env.ServerConfiguration.Address+":"+strconv.Itoa(int(env.ServerConfiguration.Port)),
-		"config/cert.pem", "config/key.pem", router)
+		env.ServerConfiguration.CertFile, env.ServerConfiguration.KeyFile, router)
 
 	if err != nil {
 		panic("Could not start server.")
@@ -298,7 +305,7 @@ func startNodeServer() {
 	}
 
 	err := http3.ListenAndServe(env.ServerConfiguration.Address+":"+strconv.Itoa(int(env.ServerConfiguration.Port)),
-		"config/cert.pem", "config/key.pem", router)
+		env.ServerConfiguration.CertFile, env.ServerConfiguration.KeyFile, router)
 
 	if err != nil {
 		panic("Could not start server.")

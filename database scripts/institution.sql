@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS Nodes
 (
     id          UUID    NOT NULL DEFAULT gen_random_uuid(),
     name        VARCHAR NOT NULL,
-    ip_address  INET    NOT NULL,
+    ip_address  VARCHAR NOT NULL,
     port_number INT2    NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (name),
@@ -63,12 +63,4 @@ CREATE TABLE IF NOT EXISTS Radiology_report_images
 );
 
 --Institution 1
-INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 1', '127.0.0.1', 8085);
---Institution 2
-INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 1', '127.0.0.1', 8086);
-INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 2', '127.0.0.1', 8087);
---Institution 3
-INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 1', '127.0.0.1', 8088);
-INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 2', '127.0.0.1', 8089);
-INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 3', '127.0.0.1', 8090);
-
+INSERT INTO Nodes (name, ip_address, port_number) VALUES ('Node 1', 'sivr.info', 8083);

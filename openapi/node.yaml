@@ -1,6 +1,6 @@
 openapi: 3.0.3
 servers:
-  - url: "https://localhost:8080/restful"
+  - url: "https://sivr.info:5003/restful"
 info:
   title: Node server API
   description: RESTful API for node server

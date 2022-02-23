@@ -15,6 +15,8 @@ type ServerConfig struct {
 	JWTPassword  string `yaml:"JWTPassword"`
 	Debug        bool   `yaml:"debug"`
 	ImagesFolder string `yaml:"imagesFolder,omitempty"`
+	CertFile     string `yaml:"certFile"`
+	KeyFile      string `yaml:"keyFile"`
 }
 
 var ServerConfiguration *ServerConfig

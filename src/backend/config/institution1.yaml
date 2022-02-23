@@ -1,7 +1,9 @@
 name: "Institution 1 server"
 serverType: "institution"
-address: "127.0.0.1"
-port: 8082
+address: "194.163.166.220"
+port: 5002
 databasePort: 10000
 JWTPassword: "secret"
 debug: true
+certFile: "/etc/letsencrypt/live/sivr.info/cert.pem"
+keyFile: "/etc/letsencrypt/live/sivr.info/privkey.pem"

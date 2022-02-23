@@ -1,7 +1,9 @@
 name: "Institution 1 Node 1 server"
 serverType: "node"
-address: "127.0.0.1"
-port: 8085
+address: "194.163.166.220"
+port: 5003
 JWTPassword: "secret"
 debug: true
-imagesFolder: "/tank/teza/images/institution1-node1/"
+imagesFolder: "/home/kreso/sivr/images/institution1-node1/"
+certFile: "/etc/letsencrypt/live/sivr.info/cert.pem"
+keyFile: "/etc/letsencrypt/live/sivr.info/privkey.pem"

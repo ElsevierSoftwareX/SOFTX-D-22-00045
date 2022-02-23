@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS Institutions
     id          UUID    NOT NULL DEFAULT gen_random_uuid(),
     name        VARCHAR NOT NULL,
     address     VARCHAR NOT NULL,
-    ip_address  INET    NOT NULL,
+    ip_address  VARCHAR NOT NULL,
     port_number INT2    NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (name),
@@ -12,8 +12,7 @@ CREATE TABLE IF NOT EXISTS Institutions
     CHECK (port_number BETWEEN 0 AND 65535)
 );
 
-INSERT INTO Institutions (name, address, ip_address, port_number) VALUES ('FER', 'Unska 3, 10000 Zagreb', '127.0.0.1', 8082);
-INSERT INTO Institutions (name, address, ip_address, port_number) VALUES ('Siemens Energy', 'Heinzelova 70a, 10000 Zagreb', '127.0.0.1', 8083);
+INSERT INTO Institutions (name, address, ip_address, port_number) VALUES ('FER', 'Unska 3, 10000 Zagreb', 'sivr.info', 8082);
 
 
 CREATE TABLE IF NOT EXISTS Users
@@ -42,13 +41,7 @@ CREATE TABLE IF NOT EXISTS Users
 
 
 INSERT INTO Users (username, password, administrator, superuser, first_name, last_name, doctor_of_medicine, active, institution)
-VALUES ('Test', '0cbc6611f5540bd0809a388dc95a615b', FALSE, TRUE, 'Testni', 'Korisnik', TRUE, TRUE, (SELECT id FROM Institutions WHERE name = 'Siemens Energy'));
-INSERT INTO Users (username, password, administrator, superuser, first_name, last_name, doctor_of_medicine, active, institution)
-VALUES ('Admin1', '2e33a9b0b06aa0a01ede70995674ee23', TRUE, FALSE, 'Administrator', '1', TRUE, TRUE, (SELECT id FROM Institutions WHERE name = 'FER'));
-INSERT INTO Users (username, password, administrator, superuser, first_name, last_name, doctor_of_medicine, active, institution)
-VALUES ('Admin2', '21eed4f2e9ab214fdbf00a2a091d63c4', TRUE, FALSE, 'Administrator', '2', TRUE, TRUE, (SELECT id FROM Institutions WHERE name = 'FER'));
-INSERT INTO Users (username, password, administrator, superuser, first_name, last_name, doctor_of_medicine, active, institution)
-VALUES ('Admin3', '84ff2c4b8b18c28f042557c0637c8528', TRUE, FALSE, 'Administrator', '3', TRUE, TRUE, (SELECT id FROM Institutions WHERE name = 'Siemens Energy'));
+VALUES ('Test', '0cbc6611f5540bd0809a388dc95a615b', TRUE, TRUE, 'Test', 'User', TRUE, TRUE, (SELECT id FROM Institutions WHERE name = 'FER'));
 
 
 

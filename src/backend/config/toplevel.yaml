@@ -1,7 +1,9 @@
 name: "Toplevel server"
 serverType: "toplevel"
-address: "127.0.0.1"
-port: 8081
+address: "194.163.166.220"
+port: 5001
 databasePort: 9000
 JWTPassword: "secret"
 debug: true
+certFile: "/etc/letsencrypt/live/sivr.info/cert.pem"
+keyFile: "/etc/letsencrypt/live/sivr.info/privkey.pem"
