@@ -1,7 +1,0 @@
-name: "Institution 2 server"
-serverType: "institution"
-address: "127.0.0.1"
-port: 8083
-databasePort: 11000
-JWTPassword: "secret"
-debug: true

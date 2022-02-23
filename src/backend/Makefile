@@ -52,41 +52,14 @@ run-toplevel-server:
 run-institution1-server:
 	$(GO_COMPILER) run main.go -config config/institution1.yaml
 
-run-institution2-server:
-	$(GO_COMPILER) run main.go -config config/institution2.yaml
-
-run-institution3-server:
-	$(GO_COMPILER) run main.go -config config/institution3.yaml
-
 run-institution1-node1-server:
 	$(GO_COMPILER) run main.go -config config/institution1-node1.yaml
-
-run-institution2-node1-server:
-	$(GO_COMPILER) run main.go -config config/institution2-node1.yaml
-
-run-institution2-node2-server:
-	$(GO_COMPILER) run main.go -config config/institution2-node2.yaml
-
-run-institution3-node1-server:
-	$(GO_COMPILER) run main.go -config config/institution3-node1.yaml
-
-run-institution3-node2-server:
-	$(GO_COMPILER) run main.go -config config/institution3-node2.yaml
-
-run-institution3-node3-server:
-	$(GO_COMPILER) run main.go -config config/institution3-node3.yaml
 
 run-toplevel-database:
 	$(COCKROACH)cockroach start-single-node --insecure -s /tank/teza/databases/toplevel/ --listen-addr=127.0.0.1:9000 --http-addr=127.0.0.1:9001
 
 run-institution1-database:
 	$(COCKROACH)cockroach start-single-node --insecure -s /tank/teza/databases/institution1/ --listen-addr=127.0.0.1:10000 --http-addr=127.0.0.1:10001
-
-run-institution2-database:
-	$(COCKROACH)cockroach start-single-node --insecure -s /tank/teza/databases/institution2/ --listen-addr=127.0.0.1:11000 --http-addr=127.0.0.1:11001
-
-run-institution3-database:
-	$(COCKROACH)cockroach start-single-node --insecure -s /tank/teza/databases/institution3/ --listen-addr=127.0.0.1:12000 --http-addr=127.0.0.1:12001
 
 help:
 	@echo 'make [target]'
@@ -100,15 +73,6 @@ help:
 	@echo '    run-web-server    				- start web server'
 	@echo '    run-toplevel-server    			- start toplevel server'
 	@echo '    run-institution1-server 			- start institution 1 server'
-	@echo '    run-institution2-server 			- start institution 2 server'
-	@echo '    run-institution3-server 			- start institution 3 server'
 	@echo '    run-institution1-node1-server	- start node 1 server from institution 1'
-	@echo '    run-institution2-node1-server	- start node 1 server from institution 2'
-	@echo '    run-institution2-node2-server	- start node 2 server from institution 2'
-	@echo '    run-institution3-node1-server	- start node 1 server from institution 3'
-	@echo '    run-institution3-node2-server	- start node 2 server from institution 3'
-	@echo '    run-institution3-node3-server	- start node 3 server from institution 3'
 	@echo '    run-toplevel-database    		- start toplevel server'
 	@echo '    run-institution1-database 		- start institution 1 server'
-	@echo '    run-institution2-database 		- start institution 2 server'
-	@echo '    run-institution3-database 		- start institution 3 server'

@@ -1,7 +1,0 @@
-name: "Institution 2 Node 1 server"
-serverType: "node"
-address: "127.0.0.1"
-port: 8086
-JWTPassword: "secret"
-debug: true
-imagesFolder: "/tank/backend/images/institution2-node1/"
