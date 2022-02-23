@@ -117,8 +117,8 @@ export class ViewImageDialogComponent implements OnInit, AfterViewInit {
             this.snackBar.open("Image is still loading.", "",
               { duration: 3000, horizontalPosition: "right", verticalPosition: "top" });
           } else {
-            this.image.nativeElement.src = URL.createObjectURL(data);
             URL.revokeObjectURL(this.image.nativeElement.src);
+            this.image.nativeElement.src = URL.createObjectURL(data);
           }
         },
         (error: HttpErrorResponse) => {
@@ -162,8 +162,8 @@ export class ViewImageDialogComponent implements OnInit, AfterViewInit {
             this.snackBar.open("Image is still loading.", "",
               { duration: 3000, horizontalPosition: "right", verticalPosition: "top" });
           } else {
-            this.image.nativeElement.src = URL.createObjectURL(data);
             URL.revokeObjectURL(this.image.nativeElement.src);
+            this.image.nativeElement.src = URL.createObjectURL(data);
           }
         },
         (error: HttpErrorResponse) => {
@@ -179,6 +179,8 @@ export class ViewImageDialogComponent implements OnInit, AfterViewInit {
     const req: Checksum = {
       md5sum: this.data.imageData.md5sum
     };
+
+    URL.revokeObjectURL(this.image.nativeElement.src);
 
     this.resizeObserver.unobserve(this.image.nativeElement);
 
