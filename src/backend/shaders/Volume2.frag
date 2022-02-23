@@ -1,4 +1,4 @@
-#version 460
+#version 450
 
 layout(binding = 1) uniform sampler3D volume;
 layout(binding = 3) uniform sampler2D frontFace;

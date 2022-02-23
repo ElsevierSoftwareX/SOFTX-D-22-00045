@@ -41,7 +41,7 @@ func InitOpenGL(staticShaderFiles *embed.FS) {
 
 	glfw.WindowHint(glfw.Visible, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
-	glfw.WindowHint(glfw.ContextVersionMinor, 6)
+	glfw.WindowHint(glfw.ContextVersionMinor, 5)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 

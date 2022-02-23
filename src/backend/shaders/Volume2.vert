@@ -1,4 +1,4 @@
-#version 460
+#version 450
 
 //layout(location = 0) uniform mat4x4 MVP;
 layout(location = 0) in vec3 Position;

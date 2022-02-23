@@ -1,16 +1,17 @@
 package render
 
 import (
+	"backend/env"
+	opengl "backend/graphics"
+	"backend/restful/node/storage"
 	"fmt"
-	"github.com/suyashkumar/dicom"
 	"net/http"
 	"os"
 	"runtime/debug"
 	"sync"
-	"backend/env"
-	opengl "backend/graphics"
-	"backend/restful/node/storage"
 	"time"
+
+	"github.com/suyashkumar/dicom"
 
 	"github.com/gin-gonic/gin"
 	"github.com/suyashkumar/dicom/pkg/frame"
